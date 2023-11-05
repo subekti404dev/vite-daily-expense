@@ -1,0 +1,35 @@
+name: Build APK
+on:
+  workflow_dispatch:
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout to Repo
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7.33.6
+
+      - name: Gen Env File
+        run: echo "${{ secrets.ENV }}" >> .env
+
+      - run: pnpm gen-gradle-props
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build Web
+        run: pnpm build && pnpm sync
+
+      - name: Build the APK
+        run: pnpm build-and
+
+      - run: tree android/app/capacitor/outputs/apk
+
+      - name: Upload APK to Artefact
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk-release
+          path: android/app/capacitor/outputs/apk/release/app-release.apk

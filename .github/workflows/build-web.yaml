@@ -1,11 +1,11 @@
-name: ci
+name: Build Web
 
 on:
-  push:
-    branches: [main]
-
+  # push:
+  #   branches: [main]
+  workflow_dispatch:
 jobs:
-  build:
+  build-web:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

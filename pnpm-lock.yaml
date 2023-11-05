@@ -1,9 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@capacitor/android': ^4.7.0
-  '@capacitor/cli': ^4.7.0
-  '@capacitor/core': ^4.7.0
+  '@capacitor/android': ^4.8.1
+  '@capacitor/cli': ^4.8.1
+  '@capacitor/core': ^4.8.1
+  '@capacitor/ios': ^5.5.1
   '@capacitor/status-bar': ^4.1.1
   '@chakra-ui/react': ^2.5.1
   '@emotion/react': ^11.10.6
@@ -38,6 +39,7 @@ dependencies:
   '@capacitor/android': 4.8.1_@capacitor+core@4.8.1
   '@capacitor/cli': 4.8.1
   '@capacitor/core': 4.8.1
+  '@capacitor/ios': 5.5.1_@capacitor+core@4.8.1
   '@capacitor/status-bar': 4.1.1_@capacitor+core@4.8.1
   '@chakra-ui/react': 2.8.1_kenhfpxdqflmzojuotpw3shqlm
   '@emotion/react': 11.11.1_ugtszpytr2kaslv26e2bligzg4
@@ -344,6 +346,14 @@ packages:
     resolution: {integrity: sha512-GIUGw1P2Iyh4jb8ZAIWRPtR2zH6ARcpwN5pn/vmIJiTujQBMQmF62s5L3m4XMQSVKlbw8iCPi/YKjlUL+EjKhA==}
     dependencies:
       tslib: 2.6.2
+    dev: false
+
+  /@capacitor/ios/5.5.1_@capacitor+core@4.8.1:
+    resolution: {integrity: sha512-h00qt8u32t8eEbIkuG4IjR0r34YZC0sIXglDH8fRDdA84xDkTybmz3WtdpRWDzh6ukE2RIY7rmD7p410WSJ2yA==}
+    peerDependencies:
+      '@capacitor/core': ^5.5.0
+    dependencies:
+      '@capacitor/core': 4.8.1
     dev: false
 
   /@capacitor/status-bar/4.1.1_@capacitor+core@4.8.1:
