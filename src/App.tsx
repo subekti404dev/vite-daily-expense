@@ -9,6 +9,7 @@ import "@fontsource/poppins";
 import { StatusBar } from "@capacitor/status-bar";
 import { Capacitor } from "@capacitor/core";
 import { Helmet } from "react-helmet";
+import { App as CapacitorApp } from "@capacitor/app";
 
 function App() {
   const [activeMenuIndex, setActiveMenuIndex] = useState(0);
@@ -17,6 +18,13 @@ function App() {
     if (Capacitor.getPlatform() !== "web") {
       StatusBar.setBackgroundColor({ color: "#705a9d" });
     }
+    CapacitorApp.addListener("backButton", ({ canGoBack }) => {
+      if (!canGoBack) {
+        CapacitorApp.exitApp();
+      } else {
+        window.history.back();
+      }
+    });
   }, []);
 
   return (
