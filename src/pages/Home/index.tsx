@@ -138,7 +138,7 @@ export const HomePage = () => {
             </Box>
           )}
           {!loading &&
-            (monthTrx || []).slice(0, 2).map((t, i) => {
+            (monthTrx || []).slice(0, 3).map((t, i) => {
               return (
                 <TransactionCard
                   key={i}
@@ -176,7 +176,11 @@ export const HomePage = () => {
             })}
         </Box>
         <FloatingButton onClick={() => setOpen(true)}>+</FloatingButton>
-        <ModalCreateTrx open={open} onDismiss={() => setOpen(false)} />
+        <ModalCreateTrx
+          open={open}
+          onDismiss={() => setOpen(false)}
+          onFinish={fetchAllData}
+        />
       </Box>
     </>
   );

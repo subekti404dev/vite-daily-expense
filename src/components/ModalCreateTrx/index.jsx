@@ -6,29 +6,43 @@ import {
   Select,
   NumberInput,
   NumberInputField,
+  Spinner,
 } from "@chakra-ui/react";
 import { BottomSheet } from "../BottomSheet";
 import React from "react";
 import usePocketStore from "../../store/usePocket";
 import useCategoryStore from "../../store/useCategory";
+import useCreateTrxStore from "../../store/useCreateTrx";
 
-const ModalCreateTrx = ({ open, onDismiss }) => {
+const ModalCreateTrx = ({ open, onDismiss, onFinish }) => {
   const initialValue = {
     name: "",
-    category: null,
-    pocket: null,
+    category_id: null,
+    pocket_id: null,
     amount: 0,
-    date: null,
+    date: new Date().toISOString().split("T")?.[0],
   };
   const [form, setForm] = React.useState(initialValue);
   const resetForm = () => setForm(initialValue);
   const [pockets] = usePocketStore((store) => [store.pockets]);
   const [categories] = useCategoryStore((store) => [store.categories]);
+  const [create, loading] = useCreateTrxStore((store) => [
+    store.createTrx,
+    store.loading,
+  ]);
+
+  const handleSubmit = async () => {
+    const data = await create(form);
+    if (data) {
+      onDismiss?.();
+      onFinish?.();
+    }
+  };
 
   const isAllFilled =
     (form.name || "").length > 2 &&
-    !!form.category &&
-    !!form.pocket &&
+    !!form.category_id &&
+    !!form.pocket_id &&
     !!form.amount &&
     !!form.date;
 
@@ -46,6 +60,7 @@ const ModalCreateTrx = ({ open, onDismiss }) => {
           border={"1px solid #cdcdcd"}
           defaultValue={form.name}
           onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+          isDisabled={loading}
         />
 
         {(form.name || "").length > 2 && (
@@ -54,10 +69,11 @@ const ModalCreateTrx = ({ open, onDismiss }) => {
             <FormLabel>Category</FormLabel>
             <Select
               border={"1px solid #cdcdcd"}
-              defaultValue={form.category}
+              defaultValue={form.category_id}
               onChange={(e) =>
-                setForm((f) => ({ ...f, category: e.target.value }))
+                setForm((f) => ({ ...f, category_id: e.target.value }))
               }
+              isDisabled={loading}
               placeholder="Select a category"
             >
               {categories.map((p, i) => (
@@ -69,17 +85,18 @@ const ModalCreateTrx = ({ open, onDismiss }) => {
           </>
         )}
 
-        {!!form.category && (
+        {!!form.category_id && (
           <>
             <Box height={2} />
             <FormLabel>Pocket</FormLabel>
             <Select
               border={"1px solid #cdcdcd"}
-              defaultValue={form.pocket}
+              defaultValue={form.pocket_id}
               onChange={(e) =>
-                setForm((f) => ({ ...f, pocket: e.target.value }))
+                setForm((f) => ({ ...f, pocket_id: e.target.value }))
               }
               placeholder="Select a pocket"
+              isDisabled={loading}
             >
               {pockets.map((p, i) => (
                 <option key={i} value={p.id}>
@@ -90,7 +107,7 @@ const ModalCreateTrx = ({ open, onDismiss }) => {
           </>
         )}
 
-        {!!form.pocket && (
+        {!!form.pocket_id && (
           <>
             <Box height={2} />
             <FormLabel>Amount</FormLabel>
@@ -104,6 +121,7 @@ const ModalCreateTrx = ({ open, onDismiss }) => {
                 }
                 setForm((f) => ({ ...f, amount: value }));
               }}
+              isDisabled={loading}
             >
               <NumberInputField />
             </NumberInput>
@@ -117,7 +135,9 @@ const ModalCreateTrx = ({ open, onDismiss }) => {
             <Input
               border={"1px solid #cdcdcd"}
               type="date"
+              value={form.date}
               onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
+              isDisabled={loading}
             />
           </>
         )}
@@ -129,9 +149,10 @@ const ModalCreateTrx = ({ open, onDismiss }) => {
               bgColor={"#705a9d"}
               color={"#fff"}
               mt={2}
-              onClick={() => console.log(form)}
+              onClick={handleSubmit}
+              isDisabled={loading}
             >
-              Add
+              {loading ? <Spinner /> : "Add"}
             </Button>
           </>
         )}
