@@ -1,4 +1,12 @@
-import { Box, Button, Input, FormLabel, Select } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Input,
+  FormLabel,
+  Select,
+  NumberInput,
+  NumberInputField,
+} from "@chakra-ui/react";
 import { BottomSheet } from "../BottomSheet";
 import React from "react";
 import usePocketStore from "../../store/usePocket";
@@ -86,14 +94,15 @@ const ModalCreateTrx = ({ open, onDismiss }) => {
           <>
             <Box height={2} />
             <FormLabel>Amount</FormLabel>
-            <Input
-              border={"1px solid #cdcdcd"}
+            <NumberInput
+              borderColor={"#cdcdcd"}
               defaultValue={form.amount}
-              type="number"
               onChange={(e) =>
                 setForm((f) => ({ ...f, amount: parseInt(e.target.value) }))
               }
-            />
+            >
+              <NumberInputField />
+            </NumberInput>
           </>
         )}
 
