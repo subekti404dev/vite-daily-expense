@@ -1,6 +1,6 @@
 /* eslint-disable no-extra-boolean-cast */
 /* eslint-disable prefer-const */
-export const formatRupiah = (angka: number | string, prefix?: string) => {
+export const formatRupiah = (angka: number | string, prefix?: boolean) => {
   if (typeof angka === "number") {
     angka = angka.toString();
   }
@@ -16,5 +16,5 @@ export const formatRupiah = (angka: number | string, prefix?: string) => {
   }
 
   rupiah = !!split[1] ? rupiah + "," + split[1] : rupiah;
-  return !!prefix ? (rupiah ? "Rp " + rupiah : "") : rupiah;
+  return prefix ? (rupiah ? "Rp " + rupiah : "") : rupiah;
 };
