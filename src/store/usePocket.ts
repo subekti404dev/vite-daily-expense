@@ -2,13 +2,25 @@
 import { create } from "zustand";
 import axiosInstance from "../utils/axios";
 
-interface IAuthStore {
-  pockets: any;
+interface IPocketStore {
+  pockets: IPocket[];
   loading: boolean;
   fetchData: () => Promise<any>;
 }
 
-const usePocketStore = create<IAuthStore>((set, get) => ({
+export interface IPocket {
+  collectionId: string;
+  collectionName: string;
+  created: string;
+  deleted: boolean;
+  id: string;
+  limit: number;
+  name: string;
+  updated: string;
+  workspace_id: string;
+}
+
+const usePocketStore = create<IPocketStore>((set, get) => ({
   pockets: [],
   loading: false,
   fetchData: async () => {

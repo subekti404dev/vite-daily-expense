@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Grid, HStack, Image, Spinner } from "@chakra-ui/react";
+import _ from "lodash";
 import { formatRupiah } from "../../utils/currency";
 import { WhiteCircle } from "../../assets/images";
 import { useEffect, useState } from "react";
@@ -9,6 +10,7 @@ import FloatingButton from "../../components/FloatingButton";
 import ModalCreateTrx from "../../components/ModalCreateTrx";
 import useAuthStore from "../../store/useAuth";
 import usePocketStore from "../../store/usePocket";
+import useMonthlyTrxStore from "../../store/useMonthlyTrx";
 
 export const HomePage = () => {
   const [open, setOpen] = useState(false);
@@ -19,9 +21,23 @@ export const HomePage = () => {
     store.loading,
   ]);
 
+  const [fetchMonthTrx, monthTrx, loadingMonthTrx] = useMonthlyTrxStore(
+    (store) => [store.fetchData, store.trx, store.loading]
+  );
   useEffect(() => {
     fetchPocket();
+    fetchMonthTrx();
   }, []);
+
+  const fullPocket = (pockets || []).map((p) => {
+    const currentUsage = _.sumBy(
+      (monthTrx || []).filter((t) => t.pocket_id === p.id),
+      "amount"
+    );
+    return { ...p, currentUsage };
+  });
+
+  const loading = loadingPocket || loadingMonthTrx;
 
   const trx = [
     {
@@ -146,7 +162,7 @@ export const HomePage = () => {
           <Box marginBottom={"16px"} fontSize={"20px"} fontWeight={500}>
             My Pockets
           </Box>
-          {loadingPocket && (
+          {loading && (
             <Box
               display={"flex"}
               justifyContent={"center"}
@@ -155,13 +171,13 @@ export const HomePage = () => {
               <Spinner />
             </Box>
           )}
-          {!loadingPocket &&
-            pockets.map((t: any, i: number) => {
+          {!loading &&
+            fullPocket.map((t, i: number) => {
               return (
                 <Pocket
                   key={i}
                   name={t.name}
-                  currentUsage={1}
+                  currentUsage={t.currentUsage}
                   limit={t.limit}
                 />
               );
