@@ -96,10 +96,14 @@ const ModalCreateTrx = ({ open, onDismiss }) => {
             <FormLabel>Amount</FormLabel>
             <NumberInput
               borderColor={"#cdcdcd"}
-              defaultValue={form.amount}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, amount: parseInt(e.target.value) }))
-              }
+              value={form.amount}
+              onChange={(e) => {
+                let value = e;
+                if (e.startsWith("0")) {
+                  value = value.slice(1);
+                }
+                setForm((f) => ({ ...f, amount: value }));
+              }}
             >
               <NumberInputField />
             </NumberInput>
