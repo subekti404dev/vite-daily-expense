@@ -1,16 +1,28 @@
-import { Box, Grid, HStack, Image } from "@chakra-ui/react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Box, Grid, HStack, Image, Spinner } from "@chakra-ui/react";
 import { formatRupiah } from "../../utils/currency";
 import { WhiteCircle } from "../../assets/images";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pocket from "./components/Pocket";
 import TransactionCard from "../../components/TransactionCard";
 import FloatingButton from "../../components/FloatingButton";
 import ModalCreateTrx from "../../components/ModalCreateTrx";
 import useAuthStore from "../../store/useAuth";
+import usePocketStore from "../../store/usePocket";
 
 export const HomePage = () => {
   const [open, setOpen] = useState(false);
   const [user] = useAuthStore((store) => [store.user]);
+  const [fetchPocket, pockets, loadingPocket] = usePocketStore((store) => [
+    store.fetchData,
+    store.pockets,
+    store.loading,
+  ]);
+
+  useEffect(() => {
+    fetchPocket();
+  }, []);
+
   const trx = [
     {
       id: 1,
@@ -32,20 +44,6 @@ export const HomePage = () => {
       category: "Food and Beverage",
       nominal: 200000,
       date: "2023-09-11T07:20:50Z",
-    },
-  ];
-  const pockets = [
-    {
-      id: 1,
-      name: "Daily Expenses",
-      currentAmount: 300000,
-      maxAmount: 1000000,
-    },
-    {
-      id: 2,
-      name: "Fixed Expenses",
-      currentAmount: 800000,
-      maxAmount: 1000000,
     },
   ];
   return (
@@ -148,16 +146,26 @@ export const HomePage = () => {
           <Box marginBottom={"16px"} fontSize={"20px"} fontWeight={500}>
             My Pockets
           </Box>
-          {pockets.map((t, i) => {
-            return (
-              <Pocket
-                key={i}
-                name={t.name}
-                currentAmount={t.currentAmount}
-                maxAmount={t.maxAmount}
-              />
-            );
-          })}
+          {loadingPocket && (
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Spinner />
+            </Box>
+          )}
+          {!loadingPocket &&
+            pockets.map((t: any, i: number) => {
+              return (
+                <Pocket
+                  key={i}
+                  name={t.name}
+                  currentUsage={1}
+                  limit={t.limit}
+                />
+              );
+            })}
         </Box>
         <FloatingButton onClick={() => setOpen(true)}>+</FloatingButton>
         <ModalCreateTrx open={open} onDismiss={() => setOpen(false)} />

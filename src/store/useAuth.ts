@@ -48,6 +48,7 @@ const useAuthStore = create<IAuthStore>((set, get) => ({
   },
   getProfile: async () => {
     try {
+      if (get().loading) return;
       set({ loading: true });
       const { data } = await axiosInstance().get("/users/me");
       if (data.data) {
