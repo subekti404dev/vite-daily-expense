@@ -11,6 +11,7 @@ import ModalCreateTrx from "../../components/ModalCreateTrx";
 import useAuthStore from "../../store/useAuth";
 import usePocketStore from "../../store/usePocket";
 import useMonthlyTrxStore from "../../store/useMonthlyTrx";
+import useCategoryStore from "../../store/useCategory";
 
 export const HomePage = () => {
   const [open, setOpen] = useState(false);
@@ -21,12 +22,16 @@ export const HomePage = () => {
     store.loading,
   ]);
 
+  const [fetchCategories] = useCategoryStore((store) => [store.fetchData]);
   const [fetchMonthTrx, monthTrx, loadingMonthTrx] = useMonthlyTrxStore(
     (store) => [store.fetchData, store.trx, store.loading]
   );
+
+  const fetchAllData = async () => {
+    await Promise.all([fetchPocket(), fetchMonthTrx(), fetchCategories()]);
+  };
   useEffect(() => {
-    fetchPocket();
-    fetchMonthTrx();
+    fetchAllData();
   }, []);
 
   const fullPocket = (pockets || []).map((p) => {
@@ -39,29 +44,6 @@ export const HomePage = () => {
 
   const loading = loadingPocket || loadingMonthTrx;
 
-  const trx = [
-    {
-      id: 1,
-      name: "Belanja Indomaret",
-      category: "Groceries",
-      nominal: 30000,
-      date: "2023-09-11T07:20:50Z",
-    },
-    {
-      id: 2,
-      name: "Nonton Ant-Man",
-      category: "Entertainment",
-      nominal: 100000,
-      date: "2023-09-11T07:20:50Z",
-    },
-    {
-      id: 3,
-      name: "Makan di McD",
-      category: "Food and Beverage",
-      nominal: 200000,
-      date: "2023-09-11T07:20:50Z",
-    },
-  ];
   return (
     <>
       <Box
@@ -128,7 +110,7 @@ export const HomePage = () => {
               Total Expense This Month
             </Box>
             <Box fontSize={26} fontWeight={600}>
-              {formatRupiah(200000, true)}
+              {formatRupiah(_.sumBy(monthTrx, "amount"), true)}
             </Box>
           </Box>
         </Box>
@@ -146,17 +128,27 @@ export const HomePage = () => {
           <Box marginBottom={"16px"} fontSize={"20px"} fontWeight={500}>
             Recent Transactions
           </Box>
-          {trx.map((t, i) => {
-            return (
-              <TransactionCard
-                key={i}
-                name={t.name}
-                category={t.category}
-                nominal={t.nominal}
-                date={t.date}
-              />
-            );
-          })}
+          {loading && (
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Spinner />
+            </Box>
+          )}
+          {!loading &&
+            (monthTrx || []).slice(0, 2).map((t, i) => {
+              return (
+                <TransactionCard
+                  key={i}
+                  name={t.name}
+                  category={t.category_name}
+                  nominal={t.amount}
+                  date={t.date}
+                />
+              );
+            })}
         </Box>
         <Box margin={"24px"} textAlign={"left"}>
           <Box marginBottom={"16px"} fontSize={"20px"} fontWeight={500}>

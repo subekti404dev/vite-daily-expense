@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import axiosInstance from "../utils/axios";
+import { fixTrxDateFromArray } from "../utils/date";
 
 interface IMonthlyTrxStore {
   trx: ITrx[];
@@ -39,7 +40,10 @@ const useMonthlyTrxStore = create<IMonthlyTrxStore>((set, get) => ({
       const { data } = await axiosInstance().get(
         `/transactions/month/${currYear}-${currMonth}`
       );
-      set({ loading: false, trx: data?.data || [] });
+      set({
+        loading: false,
+        trx: fixTrxDateFromArray(data?.data || []),
+      });
     } catch (error) {
       set({ loading: false });
     }
