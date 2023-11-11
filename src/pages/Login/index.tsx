@@ -46,7 +46,7 @@ const LoginPage = () => {
           backgroundColor="whiteAlpha.900"
           boxShadow="md"
           borderRadius={8}
-          minW={"310px"}
+          minW={"250px"}
         >
           <FormControl>
             <InputGroup>

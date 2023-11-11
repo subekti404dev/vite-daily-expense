@@ -39,7 +39,7 @@ const useAuthStore = create<IAuthStore>((set, get) => ({
 
       if (data.token) {
         authToken.setToken(data.token);
-        return get().getProfile();
+        return get().init();
       }
       set({ loggingIn: false });
     } catch (error) {
