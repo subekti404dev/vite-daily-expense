@@ -6,6 +6,7 @@ import { fixTrxDateFromArray } from "../utils/date";
 interface IHistoryTrxStore {
   trx: ITrx[];
   loading: boolean;
+  yearMonth: string;
   fetchData: (year?: number, month?: number) => Promise<any>;
 }
 
@@ -34,19 +35,23 @@ export interface ITrx {
 const useHistoryTrxStore = create<IHistoryTrxStore>((set, get) => ({
   trx: [],
   loading: false,
+  yearMonth: "",
   fetchData: async (year?: number, month?: number) => {
     try {
       if (get().loading) return;
       set({ loading: true });
       const currMonth = new Date().getMonth() + 1;
       const currYear = new Date().getFullYear();
+      const yearMonth = `${year || currYear}-${month || currMonth}`;
       const { data } = await axiosInstance().get(
-        `/transactions/month/${year || currYear}-${month || currMonth}`
+        `/transactions/month/${yearMonth}`
       );
       set({
         loading: false,
         trx: fixTrxDateFromArray(data?.data || []),
+        yearMonth,
       });
+      return data;
     } catch (error) {
       set({ loading: false });
     }

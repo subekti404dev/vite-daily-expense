@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Button, Input, Spinner, chakra } from "@chakra-ui/react";
 import TransactionCard from "../../components/TransactionCard";
 import { format, parse } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import _ from "lodash";
 import useHistoryTrxStore from "../../store/useHistoryTrx";
+import { FaFilter } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { BottomSheet } from "../../components/BottomSheet";
+const CFaFilter = chakra(FaFilter);
 
 export const History = () => {
   const initYearMonth = () => {
@@ -13,16 +16,27 @@ export const History = () => {
     const currYear = new Date().getFullYear();
     return `${currYear}-${currMonth}`;
   };
-  const [yearMonth] = useState(initYearMonth());
-  const [fetchData, trx, loading] = useHistoryTrxStore((store) => [
+  const [showFilter, setShowFilter] = useState(false);
+  const [tmpYearMonth, setTmpYearMonth] = useState(initYearMonth());
+  const [fetchData, trx, yearMonth, loading] = useHistoryTrxStore((store) => [
     store.fetchData,
     store.trx,
+    store.yearMonth,
     store.loading,
   ]);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const onFilter = async () => {
+    const y = parseInt(tmpYearMonth?.split("-")?.[0]);
+    const m = parseInt(tmpYearMonth?.split("-")?.[1]);
+    const res = await fetchData(y, m);
+    if (res) {
+      setShowFilter(false);
+    }
+  };
 
   const grouppedHistories = _.groupBy(
     trx.map((h) => ({
@@ -57,6 +71,33 @@ export const History = () => {
       fontSize="xl"
       color={"#1D1D1D"}
     >
+      <BottomSheet
+        open={showFilter}
+        onDismiss={() => {
+          setShowFilter(false);
+        }}
+      >
+        <Box p={4}>
+          <Input
+            type={"month"}
+            colorScheme="purple"
+            value={tmpYearMonth}
+            onChange={(e) => setTmpYearMonth(e.target.value)}
+            isDisabled={loading}
+          />
+          <Button
+            mt={4}
+            mb={4}
+            bgColor={"#705a9d"}
+            color={"#fff"}
+            onClick={onFilter}
+            isDisabled={loading}
+            w={"100%"}
+          >
+            {loading ? <Spinner /> : "Filter"}
+          </Button>
+        </Box>
+      </BottomSheet>
       <Box
         height={"60px"}
         justifyContent={"center"}
@@ -64,7 +105,20 @@ export const History = () => {
         display={"flex"}
         boxShadow={"1px 1px 8px 1px rgba(112,106,106,0.4)"}
       >
-        History ({yearMonth})
+        <Box w={"100%"} display={"flex"}>
+          <Box w={"80px"}></Box>
+          <Box flex={1} display={"flex"} flexDirection={"column"}>
+            <Box>History</Box>
+            <Box fontSize={10} color={"grey"} mt={-1}>
+              {yearMonth ? `(${yearMonth})` : ""}
+            </Box>
+          </Box>
+          <Box w={"80px"}>
+            <Button onClick={() => setShowFilter(true)}>
+              <CFaFilter color={"#715D9A"} />
+            </Button>
+          </Box>
+        </Box>
       </Box>
       <Box
         padding={"10px 24px"}
