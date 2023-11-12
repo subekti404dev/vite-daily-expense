@@ -32,6 +32,7 @@ specifiers:
   lodash.groupby: ^4.6.0
   lodash.sortby: ^4.7.0
   react: ^18.2.0
+  react-content-loader: ^6.2.1
   react-dom: ^18.2.0
   react-helmet: ^6.1.0
   react-icons: ^3.11.0
@@ -62,6 +63,7 @@ dependencies:
   lodash.groupby: 4.6.0
   lodash.sortby: 4.7.0
   react: 18.2.0
+  react-content-loader: 6.2.1_react@18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-helmet: 6.1.0_react@18.2.0
   react-icons: 3.11.0_react@18.2.0
@@ -4227,6 +4229,15 @@ packages:
       react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:
       '@babel/runtime': 7.23.2
+      react: 18.2.0
+    dev: false
+
+  /react-content-loader/6.2.1_react@18.2.0:
+    resolution: {integrity: sha512-6ONbFX+Hi3SHuP66JB8CPvJn372pj+qwltJV0J8z/8MFrq98I1cbFdZuhDWeQXu3CFxiiDTXJn7DFxx2ZvrO7g==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16.0.0'
+    dependencies:
       react: 18.2.0
     dev: false
 

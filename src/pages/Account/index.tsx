@@ -69,7 +69,7 @@ export const AccountPage = () => {
           <Box
             display={"flex"}
             flexDirection={"row"}
-            p={"8px"}
+            p={"12px"}
             borderBottom={"1px solid #dedede"}
           >
             <Box flex={1} display={"flex"} justifyContent={"flex-start"}>
@@ -87,7 +87,7 @@ export const AccountPage = () => {
           <Box
             display={"flex"}
             flexDirection={"row"}
-            p={"8px"}
+            p={"12px"}
             borderBottom={"1px solid #dedede"}
           >
             <Box flex={1} display={"flex"} justifyContent={"flex-start"}>
@@ -128,7 +128,14 @@ export const AccountPage = () => {
               color={"grey"}
               onClick={logout}
             >
-              <Button size={"sm"}>Logout</Button>
+              <Button
+                variant={"outline"}
+                color={"#715D9A"}
+                borderColor={"#715D9A"}
+                size={"sm"}
+              >
+                Logout
+              </Button>
             </Box>
           </Box>
         </Box>

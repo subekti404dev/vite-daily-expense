@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Grid, HStack, Image, Spinner, chakra } from "@chakra-ui/react";
+import { Box, Grid, HStack, Image, chakra } from "@chakra-ui/react";
 import _ from "lodash";
 import { formatRupiah } from "../../utils/currency";
 import { WhiteCircle } from "../../assets/images";
@@ -13,6 +13,7 @@ import usePocketStore from "../../store/usePocket";
 import useMonthlyTrxStore from "../../store/useMonthlyTrx";
 import useCategoryStore from "../../store/useCategory";
 import { FaPlus } from "react-icons/fa";
+import TrxSkeleton from "../../components/TrxSkeleton";
 
 const PlusIcon = chakra(FaPlus);
 
@@ -134,13 +135,11 @@ export const HomePage = () => {
             Recent Transactions
           </Box>
           {loading && (
-            <Box
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              <Spinner />
-            </Box>
+            <>
+              <TrxSkeleton />
+              <TrxSkeleton />
+              <TrxSkeleton />
+            </>
           )}
           {!loading &&
             (monthTrx || []).slice(0, 3).map((t, i) => {
@@ -159,13 +158,10 @@ export const HomePage = () => {
             My Pockets
           </Box>
           {loading && (
-            <Box
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              <Spinner />
-            </Box>
+            <>
+              <TrxSkeleton />
+              <TrxSkeleton />
+            </>
           )}
           {!loading &&
             fullPocket.map((t, i: number) => {

@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { BottomSheet } from "../../components/BottomSheet";
 import FloatingButton from "../../components/FloatingButton";
 import ReportModal from "./components/ReportModal";
+import TrxSkeleton from "../../components/TrxSkeleton";
 const CFaFilter = chakra(FaFilter);
 const IconReport = chakra(FaScroll);
 
@@ -135,14 +136,17 @@ export const History = () => {
         pb={"50px"}
       >
         {loading && (
-          <Box
-            height={"calc(100vh - 200px)"}
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            <Spinner />
-          </Box>
+          <>
+            <TrxSkeleton />
+            <TrxSkeleton />
+            <TrxSkeleton />
+            <TrxSkeleton />
+            <TrxSkeleton />
+            <TrxSkeleton />
+            <TrxSkeleton />
+            <TrxSkeleton />
+            <TrxSkeleton />
+          </>
         )}
         {!loading &&
           mappedHistories.map((h, i) => (
