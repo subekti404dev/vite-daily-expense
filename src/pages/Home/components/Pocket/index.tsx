@@ -1,19 +1,76 @@
-import { Box, HStack, VStack, Image } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  VStack,
+  Image,
+  Button,
+  NumberInput,
+  NumberInputField,
+  Spinner,
+} from "@chakra-ui/react";
 import { formatRupiah } from "../../../../utils/currency";
 import Progress from "../../../../components/Progress";
 import { useState } from "react";
 import { BottomSheet } from "../../../../components/BottomSheet";
+import usePocketStore, { IPocket } from "../../../../store/usePocket";
 
-const Pocket = (
-  { name, currentUsage, limit, icon, color } = { currentUsage: 1, limit: 1 }
-) => {
+interface IPocketCard {
+  data: IPocket;
+  currentUsage: number;
+  onAfterSetLimit: () => void;
+}
+
+const Pocket = ({ data, currentUsage, onAfterSetLimit }: IPocketCard) => {
+  const { name, limit, icon, color } = data;
   const percentage = (currentUsage / limit) * 100;
   const [isShowModal, setIsShowModal] = useState(false);
+  const [tmpLimit, setTmpLimit] = useState<string>("");
+  const [isUpdating, setLimit] = usePocketStore((store) => [
+    store.isUpdating,
+    store.setLimit,
+  ]);
+
+  const handleSubmit = async () => {
+    const res = await setLimit(data.id, name, parseInt(tmpLimit));
+    if (res) {
+      setIsShowModal(false);
+      onAfterSetLimit?.();
+    }
+  };
 
   return (
     <div>
-      <BottomSheet open={isShowModal} onDismiss={() => setIsShowModal(false)}>
-        kjdsjvvdv
+      <BottomSheet
+        open={isShowModal}
+        onDismiss={() => {
+          setIsShowModal(false);
+          setTmpLimit("");
+        }}
+      >
+        <Box p={4}>
+          <Box>
+            Set Limit <b>{name}</b>
+          </Box>
+          <NumberInput
+            mt={2}
+            placeholder="ex: 100000"
+            onChange={setTmpLimit}
+            isDisabled={isUpdating}
+          >
+            <NumberInputField />
+          </NumberInput>
+          <Button
+            mt={4}
+            mb={4}
+            bgColor={"#705a9d"}
+            color={"#fff"}
+            onClick={handleSubmit}
+            isDisabled={isUpdating || !tmpLimit}
+            w={"100%"}
+          >
+            {isUpdating ? <Spinner /> : "Set Limit"}
+          </Button>
+        </Box>
       </BottomSheet>
       <Box
         marginBottom={"8px"}

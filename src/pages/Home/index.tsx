@@ -162,11 +162,9 @@ export const HomePage = () => {
               return (
                 <Pocket
                   key={i}
-                  name={t.name}
+                  data={t}
                   currentUsage={t.currentUsage}
-                  limit={t.limit}
-                  icon={t.icon}
-                  color={t.color}
+                  onAfterSetLimit={fetchAllData}
                 />
               );
             })}
