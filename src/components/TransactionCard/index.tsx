@@ -3,8 +3,23 @@ import { formatRupiah } from "../../utils/currency";
 import { format, parse } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 
-const TransactionCard = ({ name, category, nominal, date }) => {
-  const parsedDate = parse(date, "yyyy-MM-dd'T'HH:mm:ssXXX", new Date());
+interface ITransactionCard {
+  name: string;
+  category: string;
+  nominal: number;
+  date?: string;
+  username?: string;
+}
+
+const TransactionCard = ({
+  name,
+  category,
+  nominal,
+  date,
+  username,
+}: ITransactionCard) => {
+  const parsedDate = () =>
+    parse(date as string, "yyyy-MM-dd'T'HH:mm:ssXXX", new Date());
   return (
     <Box marginBottom={"8px"}>
       <HStack>
@@ -16,12 +31,18 @@ const TransactionCard = ({ name, category, nominal, date }) => {
         ></Box>
         <Box flex={1} alignItems="flex-start" padding={"4px"}>
           {!!date && (
-            <Box fontSize={"10px"}>
-              {format(parsedDate, "dd MMMM yyyy", { locale: localeId })}
+            <Box fontSize={"10px"} color={"#686868"}>
+              {format(parsedDate(), "dd MMMM yyyy", { locale: localeId })}
             </Box>
           )}
+          {!!username && (
+            <Box fontSize={"10px"} color={"#686868"}>
+              {username}
+            </Box>
+          )}
+
           <Box fontSize={"16px"}>{name}</Box>
-          <Box fontSize={"14px"} color={"#C0C0C0"}>
+          <Box fontSize={"12px"} color={"#C0C0C0"}>
             {category}
           </Box>
         </Box>

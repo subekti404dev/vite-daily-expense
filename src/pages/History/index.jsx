@@ -98,7 +98,7 @@ export const History = () => {
                   name={d.name}
                   category={d.category_name}
                   nominal={d.amount}
-                  date={d.date}
+                  username={d.user_name}
                 />
               ))}
             </div>
