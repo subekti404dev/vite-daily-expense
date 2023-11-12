@@ -31,8 +31,6 @@ const ReportModal = (props: IReportModal) => {
     ).toFixed(2),
   }));
 
-  console.log(groupByPocketMapped);
-
   return (
     <BottomSheet open={props.open} onDismiss={props.onDismiss}>
       <Box p={"8px"} pb={"24px"}>

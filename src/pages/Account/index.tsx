@@ -1,5 +1,7 @@
 import { Box, Button, Image } from "@chakra-ui/react";
 import useAuthStore from "../../store/useAuth";
+import { useState } from "react";
+import AvatarModal from "./components/AvatarModal";
 
 export const AccountPage = () => {
   const [user, partners, logout] = useAuthStore((store) => [
@@ -7,6 +9,7 @@ export const AccountPage = () => {
     store.partners,
     store.logout,
   ]);
+  const [showChangeAvatar, setShowChangeAvatar] = useState(false);
 
   return (
     <Box
@@ -16,6 +19,10 @@ export const AccountPage = () => {
       fontSize="xl"
       color={"#1D1D1D"}
     >
+      <AvatarModal
+        open={showChangeAvatar}
+        onDismiss={() => setShowChangeAvatar(false)}
+      />
       <Box
         background={
           "linear-gradient(70deg, rgba(113,93,154,1) 0%, rgba(144,125,182,1) 59%, rgba(255,255,255,1) 100%)"
@@ -36,6 +43,7 @@ export const AccountPage = () => {
             bottom={-5}
             position={"absolute"}
             border={"2px solid #FFF"}
+            onClick={() => setShowChangeAvatar(true)}
           >
             <Image src={`/avatar/${user?.avatar}`} />
           </Box>
