@@ -1,10 +1,10 @@
-import { Box, Button, HStack, Image, VStack } from "@chakra-ui/react";
+import { Box, HStack, Image, VStack } from "@chakra-ui/react";
 import { formatRupiah } from "../../utils/currency";
 import { format, parse } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import useHistoryTrxStore, { ITrx } from "../../store/useHistoryTrx";
 import { useState } from "react";
-import { BottomSheet } from "../BottomSheet";
+import ConfirmModal from "../ConfirmModal";
 
 interface ITransactionCard {
   data: ITrx;
@@ -29,45 +29,28 @@ const TransactionCard = ({
     parse(date as string, "yyyy-MM-dd'T'HH:mm:ssXXX", new Date());
   return (
     <>
-      <BottomSheet
+      <ConfirmModal
         open={showModalDelete}
         onDismiss={() => setShowModalDelete(false)}
+        onOk={async () => {
+          const res = await doDelete(data.id);
+          if (res) {
+            onAfterDelete?.();
+            setShowModalDelete(false);
+          }
+        }}
+        okLabel="Sure, Delete"
+        cancelLabel="No, Thanks"
+        isLoading={isDeleting}
       >
-        <Box p={"8px 12px"}>
+        <>
           <Box>Are you sure want to delete this transaction?</Box>
           <Box m={"4px 12px 8px"} color={"grey"} fontStyle={"italic"}>
             {name} - {formatRupiah(amount)}
           </Box>
-          <Box display={"flex"} mt={2} mb={2}>
-            <Button
-              flex={1}
-              backgroundColor="#715D9A"
-              color={"#fff"}
-              isDisabled={isDeleting}
-              onClick={async () => {
-                const res = await doDelete(data.id);
-                if (res) {
-                  onAfterDelete?.();
-                  setShowModalDelete(false);
-                }
-              }}
-            >
-              Sure, Delete
-            </Button>
-            <Box w={2} />
-            <Button
-              flex={1}
-              color="#715D9A"
-              borderColor={"#715D9A"}
-              variant={"outline"}
-              isDisabled={isDeleting}
-              onClick={() => setShowModalDelete(false)}
-            >
-              No, Thanks
-            </Button>
-          </Box>
-        </Box>
-      </BottomSheet>
+        </>
+      </ConfirmModal>
+
       <Box marginBottom={"8px"} onClick={() => setShowModalDelete(true)}>
         <HStack>
           <Box

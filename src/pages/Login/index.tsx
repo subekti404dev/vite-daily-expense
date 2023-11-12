@@ -96,7 +96,8 @@ const LoginPage = () => {
           borderRadius={8}
           type="submit"
           variant="solid"
-          colorScheme="teal"
+          backgroundColor={"#715D9A"}
+          color={"#FFF"}
           width="full"
           isDisabled={isLoggingIn}
           onClick={onSubmit}

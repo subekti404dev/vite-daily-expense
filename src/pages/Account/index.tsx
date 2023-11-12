@@ -2,6 +2,7 @@ import { Box, Button, Image } from "@chakra-ui/react";
 import useAuthStore from "../../store/useAuth";
 import { useState } from "react";
 import AvatarModal from "./components/AvatarModal";
+import ConfirmModal from "../../components/ConfirmModal";
 
 export const AccountPage = () => {
   const [user, partners, logout] = useAuthStore((store) => [
@@ -10,6 +11,7 @@ export const AccountPage = () => {
     store.logout,
   ]);
   const [showChangeAvatar, setShowChangeAvatar] = useState(false);
+  const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
   return (
     <Box
@@ -23,6 +25,17 @@ export const AccountPage = () => {
         open={showChangeAvatar}
         onDismiss={() => setShowChangeAvatar(false)}
       />
+      <ConfirmModal
+        open={showConfirmLogout}
+        onDismiss={() => setShowConfirmLogout(false)}
+        onOk={logout}
+        okLabel="Sure, Logout"
+        cancelLabel="No, Thanks"
+      >
+        <>
+          <Box>Are you sure want to Logout?</Box>
+        </>
+      </ConfirmModal>
       <Box
         background={
           "linear-gradient(70deg, rgba(113,93,154,1) 0%, rgba(144,125,182,1) 59%, rgba(255,255,255,1) 100%)"
@@ -126,13 +139,13 @@ export const AccountPage = () => {
               alignItems={"flex-end"}
               flexDirection={"column"}
               color={"grey"}
-              onClick={logout}
             >
               <Button
                 variant={"outline"}
                 color={"#715D9A"}
                 borderColor={"#715D9A"}
                 size={"sm"}
+                onClick={() => setShowConfirmLogout(true)}
               >
                 Logout
               </Button>
