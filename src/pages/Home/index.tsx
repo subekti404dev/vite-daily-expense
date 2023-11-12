@@ -82,7 +82,9 @@ export const HomePage = () => {
                 w={"50px"}
                 h={"50px"}
                 borderRadius={"16px"}
-              ></Box>
+              >
+                {!!user?.avatar && <Image src={`/avatar/${user.avatar}`} />}
+              </Box>
               <Box
                 display={"flex"}
                 flexDirection={"column"}

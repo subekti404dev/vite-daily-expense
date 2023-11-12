@@ -23,6 +23,7 @@ export interface IUser {
   updated: string;
   workspace_id: string;
   iat: number;
+  avatar: string;
 }
 
 const useAuthStore = create<IAuthStore>((set, get) => ({
