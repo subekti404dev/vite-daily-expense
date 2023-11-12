@@ -6,8 +6,11 @@ import { fixTrxDateFromArray } from "../utils/date";
 interface IHistoryTrxStore {
   trx: ITrx[];
   loading: boolean;
+  loadingDelete: boolean;
   yearMonth: string;
   fetchData: (year?: number, month?: number) => Promise<any>;
+  refetchData: () => Promise<any>;
+  delete: (id: string) => Promise<any>;
 }
 
 export interface ITrx {
@@ -35,6 +38,7 @@ export interface ITrx {
 const useHistoryTrxStore = create<IHistoryTrxStore>((set, get) => ({
   trx: [],
   loading: false,
+  loadingDelete: false,
   yearMonth: "",
   fetchData: async (year?: number, month?: number) => {
     try {
@@ -54,6 +58,25 @@ const useHistoryTrxStore = create<IHistoryTrxStore>((set, get) => ({
       return data;
     } catch (error) {
       set({ loading: false });
+    }
+  },
+  refetchData: async () => {
+    const ym = get().yearMonth;
+    const y = parseInt(ym.split("-")?.[0]);
+    const m = parseInt(ym.split("-")?.[1]);
+    return get().fetchData(y, m);
+  },
+  delete: async (id: string) => {
+    try {
+      if (get().loadingDelete) return;
+      set({ loadingDelete: true });
+      const { data } = await axiosInstance().delete(`/transactions/${id}`);
+      set({
+        loadingDelete: false,
+      });
+      return data;
+    } catch (error) {
+      set({ loadingDelete: false });
     }
   },
 }));

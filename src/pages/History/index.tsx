@@ -18,12 +18,15 @@ export const History = () => {
   };
   const [showFilter, setShowFilter] = useState(false);
   const [tmpYearMonth, setTmpYearMonth] = useState(initYearMonth());
-  const [fetchData, trx, yearMonth, loading] = useHistoryTrxStore((store) => [
-    store.fetchData,
-    store.trx,
-    store.yearMonth,
-    store.loading,
-  ]);
+  const [fetchData, refetchData, trx, yearMonth, loading] = useHistoryTrxStore(
+    (store) => [
+      store.fetchData,
+      store.refetchData,
+      store.trx,
+      store.yearMonth,
+      store.loading,
+    ]
+  );
 
   useEffect(() => {
     fetchData();
@@ -143,7 +146,12 @@ export const History = () => {
                 {h.label}
               </Box>
               {(h.data || []).map((d, j) => (
-                <TransactionCard key={j} data={d} hideDate />
+                <TransactionCard
+                  key={j}
+                  data={d}
+                  hideDate
+                  onAfterDelete={refetchData}
+                />
               ))}
             </div>
           ))}

@@ -141,7 +141,14 @@ export const HomePage = () => {
           )}
           {!loading &&
             (monthTrx || []).slice(0, 3).map((t, i) => {
-              return <TransactionCard key={i} data={t} hideName />;
+              return (
+                <TransactionCard
+                  key={i}
+                  data={t}
+                  hideName
+                  onAfterDelete={fetchAllData}
+                />
+              );
             })}
         </Box>
         <Box margin={"24px"} textAlign={"left"}>
