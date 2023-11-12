@@ -173,6 +173,8 @@ export const HomePage = () => {
                   name={t.name}
                   currentUsage={t.currentUsage}
                   limit={t.limit}
+                  icon={t.icon}
+                  color={t.color}
                 />
               );
             })}

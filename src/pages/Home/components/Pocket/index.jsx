@@ -1,11 +1,11 @@
-import { Box, HStack, VStack } from "@chakra-ui/react";
+import { Box, HStack, VStack, Image } from "@chakra-ui/react";
 import { formatRupiah } from "../../../../utils/currency";
 import Progress from "../../../../components/Progress";
 import { useState } from "react";
 import { BottomSheet } from "../../../../components/BottomSheet";
 
 const Pocket = (
-  { name, currentUsage, limit } = { currentUsage: 1, limit: 1 }
+  { name, currentUsage, limit, icon, color } = { currentUsage: 1, limit: 1 }
 ) => {
   const percentage = (currentUsage / limit) * 100;
   const [isShowModal, setIsShowModal] = useState(false);
@@ -26,8 +26,15 @@ const Pocket = (
             w={"45px"}
             h={"45px"}
             borderRadius={"16px"}
-            backgroundColor={"#CBF8F1"}
-          ></Box>
+            backgroundColor={color || "#CBF8F1"}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
+            {!!icon && (
+              <Image w={30} h={30} opacity={0.3} src={`/pocket/${icon}`} />
+            )}
+          </Box>
           <Box flex={1} alignItems="flex-start" padding={"4px"}>
             <VStack gap={0}>
               <HStack style={{ width: "100%" }} gap={0}>

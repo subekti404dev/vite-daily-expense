@@ -16,6 +16,8 @@ export interface IPocket {
   id: string;
   limit: number;
   name: string;
+  icon: string;
+  color: string;
   updated: string;
   workspace_id: string;
 }
