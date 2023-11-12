@@ -9,11 +9,13 @@ interface IAuthStore {
   partners: IUser[];
   loading: boolean;
   loadingPartner: boolean;
+  loadingChangeAvatar: boolean;
   loggingIn: boolean;
   login: (email: string, password: string) => Promise<any>;
   logout: () => Promise<any>;
   getProfile: () => Promise<any>;
   getPartners: () => Promise<any>;
+  changeAvatar: (avatar: string) => Promise<any>;
   init: () => Promise<any>;
 }
 export interface IUser {
@@ -36,6 +38,7 @@ const useAuthStore = create<IAuthStore>((set, get) => ({
   partners: [],
   loading: false,
   loadingPartner: false,
+  loadingChangeAvatar: false,
   loggingIn: false,
   login: async (email: string, password: string) => {
     try {
@@ -82,6 +85,23 @@ const useAuthStore = create<IAuthStore>((set, get) => ({
     } catch (error) {
       console.log(error);
       set({ loadingPartner: false });
+    }
+  },
+  changeAvatar: async (avatar: string) => {
+    try {
+      if (get().loadingChangeAvatar) return;
+      set({ loadingChangeAvatar: true });
+      const { data } = await axiosInstance().put("/users/avatar", { avatar });
+      if (data.success) {
+        set({
+          loadingChangeAvatar: false,
+          user: { ...(get().user as IUser), avatar },
+        });
+        return data.success;
+      }
+    } catch (error) {
+      console.log(error);
+      set({ loadingChangeAvatar: false });
     }
   },
   init: async () => {
