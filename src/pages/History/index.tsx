@@ -161,14 +161,16 @@ export const History = () => {
             </div>
           ))}
       </Box>
-      <FloatingButton
-        onClick={() => {
-          setShowReport(true);
-        }}
-        isDisabled={loading}
-      >
-        <IconReport />
-      </FloatingButton>
+      {trx?.length > 0 && (
+        <FloatingButton
+          onClick={() => {
+            setShowReport(true);
+          }}
+          isDisabled={loading}
+        >
+          <IconReport />
+        </FloatingButton>
+      )}
       <ReportModal open={showReport} onDismiss={() => setShowReport(false)} />
     </Box>
   );
