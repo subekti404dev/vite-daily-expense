@@ -5,10 +5,13 @@ import { format, parse } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import _ from "lodash";
 import useHistoryTrxStore from "../../store/useHistoryTrx";
-import { FaFilter } from "react-icons/fa";
+import { FaFilter, FaScroll } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { BottomSheet } from "../../components/BottomSheet";
+import FloatingButton from "../../components/FloatingButton";
+import ReportModal from "./components/ReportModal";
 const CFaFilter = chakra(FaFilter);
+const IconReport = chakra(FaScroll);
 
 export const History = () => {
   const initYearMonth = () => {
@@ -17,6 +20,7 @@ export const History = () => {
     return `${currYear}-${currMonth}`;
   };
   const [showFilter, setShowFilter] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   const [tmpYearMonth, setTmpYearMonth] = useState(initYearMonth());
   const [fetchData, refetchData, trx, yearMonth, loading] = useHistoryTrxStore(
     (store) => [
@@ -128,6 +132,7 @@ export const History = () => {
         height={"calc(100vh - (60px + 60px))"}
         overflowY={"scroll"}
         textAlign={"left"}
+        pb={"50px"}
       >
         {loading && (
           <Box
@@ -156,6 +161,15 @@ export const History = () => {
             </div>
           ))}
       </Box>
+      <FloatingButton
+        onClick={() => {
+          setShowReport(true);
+        }}
+        isDisabled={loading}
+      >
+        <IconReport />
+      </FloatingButton>
+      <ReportModal open={showReport} onDismiss={() => setShowReport(false)} />
     </Box>
   );
 };

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Grid, HStack, Image, Spinner } from "@chakra-ui/react";
+import { Box, Grid, HStack, Image, Spinner, chakra } from "@chakra-ui/react";
 import _ from "lodash";
 import { formatRupiah } from "../../utils/currency";
 import { WhiteCircle } from "../../assets/images";
@@ -12,6 +12,9 @@ import useAuthStore from "../../store/useAuth";
 import usePocketStore from "../../store/usePocket";
 import useMonthlyTrxStore from "../../store/useMonthlyTrx";
 import useCategoryStore from "../../store/useCategory";
+import { FaPlus } from "react-icons/fa";
+
+const PlusIcon = chakra(FaPlus);
 
 export const HomePage = () => {
   const [open, setOpen] = useState(false);
@@ -176,7 +179,9 @@ export const HomePage = () => {
               );
             })}
         </Box>
-        <FloatingButton onClick={() => setOpen(true)}>+</FloatingButton>
+        <FloatingButton onClick={() => setOpen(true)}>
+          <PlusIcon />
+        </FloatingButton>
         <ModalCreateTrx
           open={open}
           onDismiss={() => setOpen(false)}
