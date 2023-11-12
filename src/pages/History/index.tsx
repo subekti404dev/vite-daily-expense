@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Spinner } from "@chakra-ui/react";
 import TransactionCard from "../../components/TransactionCard";
 import { format, parse } from "date-fns";
 import { id as localeId } from "date-fns/locale";
-import groupBy from "lodash.groupby";
-import sortBy from "lodash.sortby";
+import _ from "lodash";
 import useHistoryTrxStore from "../../store/useHistoryTrx";
 import { useEffect, useState } from "react";
 
@@ -13,8 +13,7 @@ export const History = () => {
     const currYear = new Date().getFullYear();
     return `${currYear}-${currMonth}`;
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [yearMonth, setYearMonth] = useState(initYearMonth());
+  const [yearMonth] = useState(initYearMonth());
   const [fetchData, trx, loading] = useHistoryTrxStore((store) => [
     store.fetchData,
     store.trx,
@@ -25,26 +24,23 @@ export const History = () => {
     fetchData();
   }, []);
 
-  const grouppedHistories = groupBy(
-    sortBy(
-      trx.map((h) => ({
-        ...h,
-        groupLabel: format(
-          parse(h.date, "yyyy-MM-dd'T'HH:mm:ssXXX", new Date()),
-          "dd MMMM yyyy",
-          { locale: localeId }
-        ),
-        groupId: format(
-          parse(h.date, "yyyy-MM-dd'T'HH:mm:ssXXX", new Date()),
-          "yy-MM-dd"
-        ),
-      })),
-      "date"
-    ).reverse(),
+  const grouppedHistories = _.groupBy(
+    trx.map((h) => ({
+      ...h,
+      groupLabel: format(
+        parse(h.date, "yyyy-MM-dd'T'HH:mm:ssXXX", new Date()),
+        "dd MMMM yyyy",
+        { locale: localeId }
+      ),
+      groupId: format(
+        parse(h.date, "yyyy-MM-dd'T'HH:mm:ssXXX", new Date()),
+        "yy-MM-dd"
+      ),
+    })),
     "groupId"
   );
 
-  const mappedHistories = sortBy(
+  const mappedHistories = _.sortBy(
     Object.keys(grouppedHistories || {}).map((k) => ({
       id: k,
       label: grouppedHistories?.[k]?.[0]?.groupLabel,
@@ -93,13 +89,7 @@ export const History = () => {
                 {h.label}
               </Box>
               {(h.data || []).map((d, j) => (
-                <TransactionCard
-                  key={j}
-                  name={d.name}
-                  category={d.category_name}
-                  nominal={d.amount}
-                  username={d.user_name}
-                />
+                <TransactionCard key={j} data={d} hideDate />
               ))}
             </div>
           ))}

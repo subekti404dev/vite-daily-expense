@@ -2,30 +2,12 @@
 import { create } from "zustand";
 import axiosInstance from "../utils/axios";
 import { fixTrxDateFromArray } from "../utils/date";
+import { ITrx } from "./useHistoryTrx";
 
 interface IMonthlyTrxStore {
   trx: ITrx[];
   loading: boolean;
   fetchData: () => Promise<any>;
-}
-
-export interface ITrx {
-  amount: number;
-  category_id: string;
-  collectionId: string;
-  collectionName: string;
-  created: string;
-  date: string;
-  deleted: boolean;
-  id: string;
-  name: string;
-  pocket_id: string;
-  updated: string;
-  user_id: string;
-  workspace_id: string;
-  pocket_name: string;
-  category_name: string;
-  user_name: string;
 }
 
 const useMonthlyTrxStore = create<IMonthlyTrxStore>((set, get) => ({

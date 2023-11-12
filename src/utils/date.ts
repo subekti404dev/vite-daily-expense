@@ -1,4 +1,4 @@
-import { ITrx } from "../store/useMonthlyTrx";
+import { ITrx } from "../store/useHistoryTrx";
 
 export const fixDate = (date: string) => {
   return date.replace(" ", "T").split(".")?.[0] + "Z";

@@ -24,8 +24,11 @@ export interface ITrx {
   user_id: string;
   workspace_id: string;
   pocket_name: string;
+  pocket_icon: string;
+  pocket_color: string;
   category_name: string;
   user_name: string;
+  user_avatar: string;
 }
 
 const useHistoryTrxStore = create<IHistoryTrxStore>((set, get) => ({
