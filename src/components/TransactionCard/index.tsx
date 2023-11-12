@@ -33,7 +33,7 @@ const TransactionCard = ({
         open={showModalDelete}
         onDismiss={() => setShowModalDelete(false)}
       >
-        <Box p={"4px 8px"}>
+        <Box p={"8px 12px"}>
           <Box>Are you sure want to delete this transaction?</Box>
           <Box m={"4px 12px 8px"} color={"grey"} fontStyle={"italic"}>
             {name} - {formatRupiah(amount)}
