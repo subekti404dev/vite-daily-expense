@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import axiosInstance from "../utils/axios";
@@ -5,10 +6,14 @@ import { authToken } from "../utils/token";
 
 interface IAuthStore {
   user: IUser | null;
+  partners: IUser[];
   loading: boolean;
+  loadingPartner: boolean;
   loggingIn: boolean;
   login: (email: string, password: string) => Promise<any>;
+  logout: () => Promise<any>;
   getProfile: () => Promise<any>;
+  getPartners: () => Promise<any>;
   init: () => Promise<any>;
 }
 export interface IUser {
@@ -28,7 +33,9 @@ export interface IUser {
 
 const useAuthStore = create<IAuthStore>((set, get) => ({
   user: null,
+  partners: [],
   loading: false,
+  loadingPartner: false,
   loggingIn: false,
   login: async (email: string, password: string) => {
     try {
@@ -47,6 +54,9 @@ const useAuthStore = create<IAuthStore>((set, get) => ({
       set({ loggingIn: false });
     }
   },
+  logout: async () => {
+    set({ user: null, partners: [] });
+  },
   getProfile: async () => {
     try {
       if (get().loading) return;
@@ -60,9 +70,27 @@ const useAuthStore = create<IAuthStore>((set, get) => ({
       set({ loading: false });
     }
   },
+  getPartners: async () => {
+    try {
+      if (get().loadingPartner) return;
+      set({ loadingPartner: true });
+      const { data } = await axiosInstance().get("/users/partners");
+      if (data.data) {
+        set({ partners: data.data || [], loadingPartner: false });
+        return data.data;
+      }
+    } catch (error) {
+      console.log(error);
+      set({ loadingPartner: false });
+    }
+  },
   init: async () => {
     if (authToken.getToken()) {
-      return get().getProfile();
+      const [profile] = await Promise.all([
+        get().getProfile(),
+        get().getPartners(),
+      ]);
+      return profile;
     }
   },
 }));
