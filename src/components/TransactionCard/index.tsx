@@ -78,7 +78,9 @@ const TransactionCard = ({
               </Box>
             )}
 
-            <Box fontSize={"16px"}>{name}</Box>
+            <Box fontSize={"16px"} wordBreak={"break-all"}>
+              {name}
+            </Box>
             <Box fontSize={"12px"} color={"#C0C0C0"}>
               {category_name}
             </Box>
