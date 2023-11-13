@@ -6,30 +6,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout to Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v2
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
         with:
           version: 7.33.6
 
-      - name: Gen Env File
-        run: echo "${{ secrets.ENV }}" >> .env
+      - name: Build APK
+        run: |
+          cd frontend &&\
+          echo "${{ secrets.ENV }}" >> .env &&\
+          pnpm gen-gradle-props &&\
+          pnpm i && pnpm build && pnpm sync &&\
+          pnpm build-and
 
-      - run: pnpm gen-gradle-props
-
-      - name: Install Dependencies
-        run: pnpm install
-
-      - name: Build Web
-        run: pnpm build && pnpm sync
-
-      - name: Build the APK
-        run: pnpm build-and
-
-      - run: tree android/app/capacitor/outputs/apk
+      - run: tree frontend/android/app/capacitor/outputs/apk
 
       - name: Upload APK to Artefact
         uses: actions/upload-artifact@v3
         with:
           name: apk-release
-          path: android/app/capacitor/outputs/apk/release/app-release.apk
+          path: frontend/android/app/capacitor/outputs/apk/release/app-release.apk
