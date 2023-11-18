@@ -1,12 +1,12 @@
 FROM node:16-alpine3.18 as be_builder
 WORKDIR /app
-COPY backend /app
-RUN cd /app/backend && npm run i && npm run build 
+COPY backend /app/backend
+RUN  npm install -g pnpm@7.26.3 && cd /app/backend && pnpm i && pnpm run build 
 
 FROM node:16-alpine3.18 as fe_builder
 WORKDIR /app
-COPY frontend /app
-RUN cd /app/frontend && npm run i && npm run build 
+COPY frontend /app/frontend
+RUN npm install -g pnpm@7.26.3 && cd /app/frontend && pnpm i && pnpm run build 
 
 FROM alpine:latest
 WORKDIR /app
