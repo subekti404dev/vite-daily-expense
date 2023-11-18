@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "npm run build:clean && npm run build:js && npm run build:cjs && npm run build:bin",
+    "build:clean": "rimraf dist/",
+    "build:js": "npx tsc",
+    "build:cjs": "npx esbuild dist/index.js  --bundle --outfile=dist/app.cjs --format=cjs --platform=node",
+    "build:bin": "ncc build dist/app.cjs -o dist && rimraf dist/middlewares dist/routes dist/utils dist/app.cjs dist/index.js && pkg dist/index.cjs -o app",
     "start": "node dist/index.js",
     "dev": "pnpm build && concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
   },
@@ -12,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vercel/ncc": "^0.38.1",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "cross-fetch": "^4.0.0",
@@ -32,6 +37,8 @@
     "@types/node": "^18.11.9",
     "concurrently": "^7.5.0",
     "nodemon": "^2.0.20",
+    "pkg": "^5.8.1",
+    "rimraf": "^5.0.5",
     "typescript": "^4.8.4"
   }
 }
