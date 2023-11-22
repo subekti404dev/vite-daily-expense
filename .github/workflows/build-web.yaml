@@ -11,16 +11,14 @@ jobs:
       - name: Checkout to Repo
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 7.33.6
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
 
       - name: Build
         run: |
           cd frontend && \
           echo "${{ secrets.REACT_ENV }}" >> .env && \
-          pnpm i && pnpm build
+          bun i && bun run build
 
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@main
