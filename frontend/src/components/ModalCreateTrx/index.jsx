@@ -36,6 +36,7 @@ const ModalCreateTrx = ({ open, onDismiss, onFinish }) => {
     if (data) {
       onDismiss?.();
       onFinish?.();
+      resetForm();
     }
   };
 
