@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build:clean && npm run build:js && npm run build:cjs && npm run build:bin",
+    "build": "npm run build:clean && npm run build:js && npm run build:cjs",
     "build:clean": "rimraf dist/",
     "build:js": "npx tsc",
-    "build:cjs": "npx esbuild dist/index.js  --bundle --outfile=dist/app.cjs --format=cjs --platform=node",
-    "build:bin": "ncc build dist/app.cjs -o dist && rimraf dist/middlewares dist/routes dist/utils dist/app.cjs dist/index.js && pkg dist/index.cjs -o app",
+    "build:cjs": "npx esbuild dist/index.js  --bundle --outfile=dist/app.cjs --format=cjs --platform=node && ncc build dist/app.cjs -o single",
+    "build:bin": "pkg single/index.cjs -o single/dew",
     "start": "node dist/index.js",
     "dev": "pnpm build && concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
   },
