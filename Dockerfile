@@ -17,4 +17,4 @@ COPY --from=builder /app/backend/single/dew /usr/local/bin/dew
 RUN chmod +x /usr/local/bin/dew
 
 EXPOSE ${PORT:-7000}
-CMD ["dew"]
+CMD ["/usr/local/bin/dew"]
